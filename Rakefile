@@ -18,7 +18,7 @@ Jeweler::Tasks.new do |gem|
   gem.homepage = "http://github.com/pygatea/ruby_graph"
   gem.license = "MIT"
   gem.summary = %Q{A very simple graph library for Ruby.}
-  gem.description = %Q{TODO: longer description of your gem}
+  gem.description = %Q{A very simple graph library for Ruby, implementing a data structure for undirected graphs as well as a method to check for isomorphism. Several utility methods are included as well.}
   gem.email = "dj@lobraico.com"
   gem.authors = ["Dominick LoBraico"]
   # dependencies defined in Gemfile
