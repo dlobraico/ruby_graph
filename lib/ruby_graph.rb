@@ -1,1 +1,1 @@
-require 'ruby_graph/graph.rb'
+require 'ruby_graph/graph'
