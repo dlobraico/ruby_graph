@@ -2,20 +2,17 @@
 require "set"
 
 def main
+    g = Graph.adjacency_matrix_to_graph(Graph.file_to_adjacency_matrix('../../spec/test_input/4/a'))
+    h = Graph.adjacency_matrix_to_graph(Graph.file_to_adjacency_matrix('../../spec/test_input/4/b'))
+    puts "Example 4: #{g.isomorphic?(h)}"
 
-    g1 = Graph.new([0, 1, 2], [[0, 1]])
-    g2 = Graph.new([0, 1, 2], [[0, 1]])
+    a = Graph.adjacency_matrix_to_graph(Graph.file_to_adjacency_matrix('../../spec/test_input/5/a'))
+    b = Graph.adjacency_matrix_to_graph(Graph.file_to_adjacency_matrix('../../spec/test_input/5/b'))
+    puts "Example 5: #{a.isomorphic?(b)}"
 
-    g3 = Graph.new([0, 1, 2], [[0, 1], [0, 2], [1, 2]])
-
-    g4 = Graph.new([0,1,2,3,4], [[0,2], [1,2], [2,0], [2,1], [2,3], [2,4], [3,2], [3,4], [4,2], [4,3]])
-    g5 = Graph.new([0,1,2,3,4], [[0,2], [1,2], [1,3], [2,0], [2,1], [2,3], [2,4], [3,1], [3,2], [4,2]])
-
-    puts g4
-    puts
-    puts g5 
-    puts
-    "g4, g5 isomorphic?: #{g4.isomorphic?(g5)}"
+    c = Graph.adjacency_matrix_to_graph(Graph.file_to_adjacency_matrix('../../spec/test_input/6/a'))
+    d = Graph.adjacency_matrix_to_graph(Graph.file_to_adjacency_matrix('../../spec/test_input/6/b'))
+    puts "Example 6: #{c.isomorphic?(d)}"
 end
 
 class Graph
@@ -133,16 +130,31 @@ class Graph
     def isomorphic?(graph)
         list = Graph.degree_to_list(self.adjacency_matrix.size)
         if self.adjacency_matrix == graph.adjacency_matrix
-            return true
+            return 1
         else 
             Graph.each_permutation(list) do |p|
                 if graph.adjacency_matrix == self.apply_permutation(p.flatten)
                     print p.flatten.join(','); puts
-                    return true
+                    return 1
                 end
             end
-            return false
+            return 0
         end
+    end
+
+    def apply_permutation(perm)
+        orig = self.adjacency_matrix
+        orig2 = self.adjacency_matrix
+
+        result = Array.new(orig.size)
+        perm.each_with_index do |r, i| # permute the rows
+            result[i] = orig[r].dup
+            perm.each_with_index do |c, j| # permute the columns
+                result[i][j] = orig[r][c]
+            end
+        end
+
+        return result
     end
 
     def self.degree_to_list(deg)
@@ -169,17 +181,31 @@ class Graph
         return result
     end
 
-    def apply_permutation(perm)
-        orig = self.adjacency_matrix
-
-        result = Array.new(orig.size)
-        perm.each_with_index do |r, i| # permute the rows
-            result[i] = orig[r]
-            perm.each_with_index do |c, j|
-                result[i][j] = orig[r][c]
+    #TODO add some error checking and make sure matrix is square
+    def self.adjacency_matrix_to_graph(matrix)
+        g = Graph.new
+        rows = matrix.size
+        rows.times { |i| g.add_vertex(i) }
+        matrix.each_with_index do |row, i|
+            row.each_with_index do |col, j|
+                if col == 1
+                    g.add_edge(i,j)
+                end
             end
         end
+        return g 
+    end
 
-        return result
+    def self.file_to_adjacency_matrix(file_path)
+        file = File.open(file_path)
+        result = []
+        file.each_line do |line|
+            row = []
+            line.split(' ').each do |char|
+                row << char.to_i
+            end
+            result << row
+        end
+        result
     end
 end
