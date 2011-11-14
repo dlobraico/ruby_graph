@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 require 'ruby_graph'
 
-a = Graph.adjacency_matrix_to_graph(Graph.file_to_adjacency_matrix(ARGV[1]))
-b = Graph.adjacency_matrix_to_graph(Graph.file_to_adjacency_matrix(ARGV[2]))
+a = Graph.adjacency_matrix_to_graph(Graph.file_to_adjacency_matrix(ARGV[0]))
+b = Graph.adjacency_matrix_to_graph(Graph.file_to_adjacency_matrix(ARGV[1]))
 
-a.isomorphic? (b)
+puts a.isomorphic? (b)

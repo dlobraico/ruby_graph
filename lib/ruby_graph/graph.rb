@@ -1,20 +1,6 @@
 #!/usr/bin/env ruby
 require "set"
 
-def main
-    g = Graph.adjacency_matrix_to_graph(Graph.file_to_adjacency_matrix('../../spec/test_input/4/a'))
-    h = Graph.adjacency_matrix_to_graph(Graph.file_to_adjacency_matrix('../../spec/test_input/4/b'))
-    puts "Example 4: #{g.isomorphic?(h)}"
-
-    a = Graph.adjacency_matrix_to_graph(Graph.file_to_adjacency_matrix('../../spec/test_input/5/a'))
-    b = Graph.adjacency_matrix_to_graph(Graph.file_to_adjacency_matrix('../../spec/test_input/5/b'))
-    puts "Example 5: #{a.isomorphic?(b)}"
-
-    c = Graph.adjacency_matrix_to_graph(Graph.file_to_adjacency_matrix('../../spec/test_input/6/a'))
-    d = Graph.adjacency_matrix_to_graph(Graph.file_to_adjacency_matrix('../../spec/test_input/6/b'))
-    puts "Example 6: #{c.isomorphic?(d)}"
-end
-
 class Graph
     def initialize(vertices=[], edges=[])
         @vertices = Hash.new(0)
@@ -134,7 +120,7 @@ class Graph
         else 
             Graph.each_permutation(list) do |p|
                 if graph.adjacency_matrix == self.apply_permutation(p.flatten)
-                    print p.flatten.join(','); puts
+                    print p.flatten.map{|a| a + 1}.join(','); puts
                     return 1
                 end
             end
