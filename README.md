@@ -4,11 +4,13 @@ ruby\_graph
 ruby\_graph is a simply graph library written in Ruby. At this point, its main purpose is whether two graphs are isomorphic. To this end, the gem includes two command-line executables, `isomorphism` and `permutations`. `isomorphism` expects two arguments, each a path to a text file containing space and line delimited adjacency matrices for graphs. Output is the permutation functioning as an isomorphism between the two graphs if they are isomorphic, followed by a 1. If they are not isomorphic, output is simply a 0. For example:
 
 file_1
+ 
     1 0 0
     0 1 0
     0 0 0
 
 file_2
+ 
     1 0 0
     0 1 0
     0 0 0
