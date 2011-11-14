@@ -1,7 +1,7 @@
 require "set"
 
 class Graph
-    def initialize(vertices=[], edges=[])
+    def initialize(vertices=[], edges=[]) # constructor method for a graph
         @vertices = Hash.new(0)
         vertices.each { |v| add_vertex(v) }
 
@@ -24,13 +24,13 @@ class Graph
         @edges[w][v] = value 
     end
 
-    def each_vertex(&blk)
+    def each_vertex(&blk) # iterator for vertices
         @vertices.each do |v,n|
             blk.call(v)
         end
     end
 
-    def each_edge(uniq=false, &blk)
+    def each_edge(uniq=false, &blk) # iterator for edges
         @edges.each do |v|
             v.each do |w|
                 blk.call(v, w) if !uniq || vertex_label(v) <= vertex_label(w)
@@ -38,32 +38,32 @@ class Graph
         end
     end
 
-    def add_edge(v, w)
+    def add_edge(v, w) # add an edge to a graph
         self[v,w]= 1
     end
 
-    def delete_edge(v, w)
+    def delete_edge(v, w) # remove an edge from a graph
         @edges[v][w] = 0
         @edges[w][v] = 0
     end
 
-    def add_vertex(v)
+    def add_vertex(v) # add a vertex to a graph
         @vertices[v]= v
     end
 
-    def delete_vertex(v)
+    def delete_vertex(v) # remove a vertex from a graph
         @vertices.delete(v)
     end
 
-    def vertex_label(v)
+    def vertex_label(v) # check the vertex label
         return @vertices[v]
     end
 
-    def adjacent?(v, w)
+    def adjacent?(v, w) # check if two vertices are adjacent
         return self[v, w] != 0
     end
 
-    def vertices
+    def vertices # return all vertices
         result= []
         each_vertex do |v|
             result.push(v)
@@ -71,7 +71,7 @@ class Graph
         return result
     end
 
-    def edges(uniq= false)
+    def edges(uniq= false) # return all edges
         result= []
         each_edge(uniq) do |e|
             result.push(e)
@@ -79,13 +79,13 @@ class Graph
         return result
     end
 
-    def each_successing_vertex(v, &blk)
+    def each_successing_vertex(v, &blk) # iterator for adjacent vertices, useful for moving through cycles
         each_vertex do |w|
             blk.call(w) if adjacent?(v, w)
         end
     end
 
-    def adjacency_matrix
+    def adjacency_matrix # return the adjacency matrix of a graph
         result = []
         each_vertex do |v|
             row = []
@@ -102,7 +102,7 @@ class Graph
         return result
     end
 
-    def to_s
+    def to_s # pretty print a graph object by showing its adjacency matrix
         adjacency_matrix.each do |row|
             row.each do |v|
                 print "#{v} "
@@ -111,24 +111,30 @@ class Graph
         end
     end
 
-    #TODO give one exit point; write improved version
-    def isomorphic?(graph)
+    def isomorphic?(graph) # check if two graphs are isomorphic
+        # if the two graphs have a different number of vertices or edges, return false immediately
+        unless (self.vertices.size == graph.vertices.size) and (self.edges.size == graph.edges.size) 
+            return 0
+        end
+
         list = Graph.degree_to_list(self.adjacency_matrix.size)
+        # if the two graphs have identical adjacency matrices, they are isomorphic
         if self.adjacency_matrix == graph.adjacency_matrix
             print list.flatten.map{|a| a + 1}.join(','); puts
             return 1
         else 
+            # otherwise, we enter the worst case scenario: for each permutation of degree n (where n is the number of vertices of the graph) apply the permutation to the graph and check if the adjacency matrices are identical
             Graph.each_permutation(list) do |p|
                 if graph.adjacency_matrix == self.apply_permutation(p.flatten)
                     print p.flatten.map{|a| a + 1}.join(','); puts
                     return 1
                 end
             end
-            return 0
+            return 0 # if nothing else was true, return false
         end
     end
 
-    def apply_permutation(perm)
+    def apply_permutation(perm) # helper method to apply a permutation to a graph
         orig = self.adjacency_matrix
         orig2 = self.adjacency_matrix
 
@@ -143,12 +149,12 @@ class Graph
         return result
     end
 
-    def self.degree_to_list(deg)
+    def self.degree_to_list(deg) # convert a degree (integer) to a list
         result = (0..(deg-1)).to_a
         return result
     end
 
-    def self.each_permutation(list)
+    def self.each_permutation(list) # iterate through permutations of a given array
         if list.length < 2
             yield list
         else
@@ -158,7 +164,7 @@ class Graph
         end
     end
 
-    def self.permutation_to_matrix(permutation)
+    def self.permutation_to_matrix(permutation) # convert a permutation in array form to a matrix
         result = Array.new(permutation.size)
         permutation.each_with_index do |p, i|
             result[i] = Array.new(permutation.size, 0)
@@ -168,7 +174,7 @@ class Graph
     end
 
     #TODO add some error checking and make sure matrix is square
-    def self.adjacency_matrix_to_graph(matrix)
+    def self.adjacency_matrix_to_graph(matrix) # helper method to convert an adjacency matrix to a graph
         g = Graph.new
         rows = matrix.size
         rows.times { |i| g.add_vertex(i) }
@@ -182,7 +188,7 @@ class Graph
         return g 
     end
 
-    def self.file_to_adjacency_matrix(file_path)
+    def self.file_to_adjacency_matrix(file_path) # helper method to scan a file and convert it to an adjacency matrix
         file = File.open(file_path)
         result = []
         file.each_line do |line|
