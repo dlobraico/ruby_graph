@@ -1,0 +1,5 @@
+#!/usr/bin/env ruby
+
+Graph.each_permutation(ARGV[1]) do |p|
+    print p; puts
+end
