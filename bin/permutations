@@ -1,5 +1,9 @@
 #!/usr/bin/env ruby
+require 'ruby_graph'
 
-Graph.each_permutation(ARGV[1]) do |p|
-    print p; puts
+list = Graph.degree_to_list(ARGV[0].to_i)
+
+Graph.each_permutation(list) do |p|
+    p.flatten.each {|x| print "#{x + 1} " }
+    puts
 end

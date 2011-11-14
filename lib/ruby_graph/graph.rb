@@ -115,6 +115,7 @@ class Graph
     def isomorphic?(graph)
         list = Graph.degree_to_list(self.adjacency_matrix.size)
         if self.adjacency_matrix == graph.adjacency_matrix
+            print list.flatten.map{|a| a + 1}.join(','); puts
             return 1
         else 
             Graph.each_permutation(list) do |p|
