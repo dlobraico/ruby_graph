@@ -18,6 +18,7 @@ file_2
 `isomorphism file_1 file_2`
 
 output
+  
     1,2,3
     1
 
